@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'tasks.apps.TasksConfig',
     'simple_history',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'home'
 
 MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',

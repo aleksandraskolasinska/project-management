@@ -25,3 +25,9 @@ server down:
 ```bash
 docker compose down
 ```
+
+## Create superuser to login
+
+```bash
+docker compose exec -it adpbweb python manage.py createsuperuser
+```

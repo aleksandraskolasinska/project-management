@@ -22,4 +22,7 @@ from tasks.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('users/', include('users.urls')),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    # path('logout/', LogoutView.as_view(), name='logout'),
 ]
