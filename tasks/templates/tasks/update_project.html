@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Edit Project</h2>
+  <form method="post" action="{% url 'tasks:update_project' project_id=project.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Project</button>
+  </form>
+{% endblock %}
