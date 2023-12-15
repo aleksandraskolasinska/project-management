@@ -1,3 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 
-# Create your views here.
+class LogoutView(LogoutView):
+    template_name = 'registration/logout.html'
