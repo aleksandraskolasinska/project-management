@@ -5,4 +5,5 @@
   <p>Description: {{ project.project_description }}</p>
   <p>Start Date: {{ project.start_date }}</p>
   <p>End Date: {{ project.end_date }}</p>
+  <a href="{% url 'tasks:update_project' project_id=project.id %}">Edit</a>
 {% endblock %}

@@ -31,10 +31,10 @@
 
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link" href="">Create project</a>
+                  <a class="nav-link" href="{% url 'tasks:create_project' %}">Create project</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href=""> View projects </a>
+                  <a class="nav-link" href="{% url 'tasks:project_list' %}"> View projects </a>
                 </li>
                 {% endif %}
 
