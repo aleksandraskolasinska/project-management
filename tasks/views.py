@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.decorators import login_required
 
-from .models import Project
+from .models import Project, ProjectStatus
 from .forms import ProjectForm
 
 # Create your views here.
@@ -33,7 +33,7 @@ def create_project(request):
             project.last_edited_by = request.user
             project.save()
 
-            if project.status == ProjectStatus.done:
+            if project.projectStatus == ProjectStatus.done:
                 project.end_date = timezone.now()
                 project.save()
 
@@ -55,3 +55,13 @@ def update_project(request, project_id):
     else:
         form = ProjectForm(instance=project)
     return render(request, 'tasks/update_project.html', {'form': form, 'project': project})
+
+@login_required
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == 'POST':
+        project.delete()
+        return redirect('tasks:project_list')
+
+    return render(request, 'tasks/delete_project.html', {'project': project})

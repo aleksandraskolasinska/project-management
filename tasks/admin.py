@@ -21,3 +21,5 @@ class Admin(admin.ModelAdmin):
             if request.user.is_staff or request.user.is_superuser:
                 return self.readonly_fields + ['project_description']
         return self.readonly_fields
+
+admin.site.register(Project)

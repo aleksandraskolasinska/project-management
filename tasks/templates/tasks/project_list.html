@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Project List</h2>
-  <ul>
-    {% for project in projects %}
-      <li><a href="{% url 'tasks:project_detail' project_id=project.id %}">{{ project.project_title }}</a></li>
-    {% endfor %}
-  </ul>
+    <h2>Project List</h2>
+    <ul>
+        {% for project in projects %}
+            <li>
+                <strong>{{ project.project_title }}</strong> - {{ project.project_description }}
+                (<a href="{% url 'tasks:delete_project' project_id=project.id %}">Delete</a>)
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
