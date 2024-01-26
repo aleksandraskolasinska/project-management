@@ -3,12 +3,15 @@
 {% block title %} Projects {% endblock %}
 {% block content %}
 
-{% if user.is_authenticated %}
 <span>
+    
+</span>
+{% if user.is_authenticated %}
+<span class="home-page-text" style="text-align: center;">
 You can <a href="{% url 'tasks:create_project' %}">create a new project</a> or <a href="{% url 'tasks:project_list' %}">view projects</a> you're a part of.
 </span>
 {% else %}
-<span>
+<span class="home-page-text" style="text-align: center;">
 To create projects, please <a href="{% url 'login' %}">log in</a> or <a href="">create a new account</a>
 </span>
 {% endif %}

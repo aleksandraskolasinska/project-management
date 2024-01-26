@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} Account Details {% endblock %}
+{% block content %}
+
+<h1 class="account-heading">Account Details</h1>
+
+<div class="account-details">
+  <p class="detail">
+    <span class="account-label">Username:</span>
+    <span class="account-value">{{ user.username }}</span>
+    <a href="{% url 'users:username_update' %}" class="account-update-link">Update</a>
+  </p>
+
+  <p class="detail">
+    <span class="account-label">Email:</span>
+    <span class="account-value">{{ user.email }}</span>
+    <a href="{% url 'users:email_update' %}" class="account-update-link">Update</a>
+  </p>
+
+  <p class="detail">
+    <span class="account-label">First Name:</span>
+    <span class="account-value">{{ user.first_name }}</span>
+    <a href="{% url 'users:first_name_update' %}" class="account-update-link">Update</a>
+  </p>
+
+  <p class="detail">
+    <span class="account-label">Last Name:</span>
+    <span class="account-value">{{ user.last_name }}</span>
+    <a href="{% url 'users:last_name_update' %}" class="account-update-link">Update</a>
+  </p>
+
+  <a href="{% url 'users:password_update' %}" class="password-update-link">Update Password</a>
+</div>
+
+{% endblock %}

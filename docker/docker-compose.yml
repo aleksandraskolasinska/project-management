@@ -7,6 +7,8 @@ services:
       - POSTGRES_USER=my_db_user
       - POSTGRES_PASSWORD=my_db_password
       - POSTGRES_DB=my_db_name
+    volumes:
+      - my_db_data:/var/lib/postgresql/data
   adpbweb:
     build:
       context: ..
@@ -18,3 +20,5 @@ services:
       - "8000:8000"
     depends_on:
       - adpbdb
+volumes:
+  my_db_data:
