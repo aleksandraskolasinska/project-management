@@ -1,10 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="create-project-container">
   <h2>Edit Project</h2>
   <form method="post" action="{% url 'tasks:update_project' project_id=project.id %}">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update Project</button>
+    <div class="form-group">
+      {{ form.project_title.label_tag }}
+      {{ form.project_title }}
+    </div>
+    <div class="form-field-container">
+      <span class="form-group">Priority:</span>
+      <div class="form-field">{{ form.projectPriority }}</div>
+  </div>
+  
+  <div class="form-field-container">
+      <span class="form-group">Status:</span>
+      <div class="form-field">{{ form.projectStatus }}</div>
+  </div>
+    <div class="form-group">
+      <p>Description:</p>
+      {{ form.project_description }}
+    </div>
+
+    <div>
+    <button class="button-main" type="submit">Update Project</button>
+    <button class="button-main" type="button" onclick="goBack()">Go Back</button>
+    </div>
+    <script>
+    function goBack() {
+        window.history.back();
+    }
+    </script>
   </form>
+</div>
 {% endblock %}
+
+
+
