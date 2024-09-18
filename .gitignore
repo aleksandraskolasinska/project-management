@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+export_tables.sh
+
 # C extensions
 *.so
 

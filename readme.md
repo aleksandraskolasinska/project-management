@@ -1,3 +1,7 @@
+# Overview
+
+Practice project for Django using PostgreSQL databse. 
+
 # How to start
 
 This project uses Docker. By default the development server runs on:
