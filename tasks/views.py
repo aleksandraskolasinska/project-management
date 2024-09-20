@@ -19,36 +19,29 @@ def project_list(request):
     return render(request, 'tasks/project_list.html', {'projects': projects})
 
 @login_required
-# def project_detail(request, project_id):
-#     project = get_object_or_404(Project, pk=project_id)
-#     comments = project.comments.all()
-
-#     if request.method == 'POST' and 'comment_submit' in request.POST:
-#         comment_form = CommentForm(request.POST)
-#         if comment_form.is_valid():
-#             comment = comment_form.save(commit=False)
-#             comment.project = project
-#             comment.user = request.user
-#             comment.save()
-#             return redirect('tasks:project_detail', project_id=project_id)
-#     else:
-#         comment_form = CommentForm()
-
-#     return render(request, 'tasks/project_detail.html', {
-#         'project': project,
-#         'comments': comments,
-#         'comment_form': comment_form,
-#     })
 def project_detail(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
-    
-    # Check if the user is either an admin or assigned to the project
-    if request.user.is_superuser or request.user.groups.filter(name="Admin").exists() or request.user in project.assigned_users.all():
-        comments = project.comments.all()  # If you have comments related to the project
-        return render(request, 'tasks/project_detail.html', {'project': project, 'comments': comments})
-    
-    # If the user is not authorized, raise a 403 Forbidden error
-    return HttpResponseForbidden("You are not authorized to view this project.")
+    comments = project.comments.all()
+
+    if not (request.user.is_superuser or request.user.groups.filter(name="Admin").exists() or request.user in project.assigned_users.all()):
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
+    if request.method == 'POST' and 'comment_submit' in request.POST:
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.project = project
+            comment.user = request.user
+            comment.save()
+            return redirect('tasks:project_detail', project_id=project_id)
+    else:
+        comment_form = CommentForm()
+
+    return render(request, 'tasks/project_detail.html', {
+        'project': project,
+        'comments': comments,
+        'comment_form': comment_form,
+    })
 
 @login_required
 def create_project(request):
@@ -72,6 +65,10 @@ def create_project(request):
 @login_required
 def update_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
+
+    if not (request.user.is_superuser or request.user.groups.filter(name="Admin").exists() or request.user in project.assigned_users.all()):
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
@@ -86,6 +83,9 @@ def update_project(request, project_id):
 @login_required
 def delete_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
+
+    if not (request.user.is_superuser or request.user.groups.filter(name="Admin").exists() or request.user in project.assigned_users.all()):
+        return HttpResponseForbidden("You are not authorized to view this page.")
 
     if request.method == 'POST':
         project.delete()
