@@ -1,0 +1,36 @@
+<!-- tasks/templates/tasks/project_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="project-details">
+    <h2>{{ project.project_title }}</h2>
+    <p><strong>Created:</strong> {{ project.start_date|date:"F d, Y H:i" }}</p>
+    <p><strong>Modified:</strong> {{ project.modified|date:"F d, Y H:i" }}</p>
+    <p><strong>Status:</strong> {{ project.get_projectStatus_display }}</p>
+    <p><strong>Priority:</strong> {{ project.get_projectPriority_display }}</p>
+    
+    <!-- Display project creator -->
+    <p><strong>Created by:</strong> {{ project.created_by.username }}</p>
+    
+    <p><strong>Description:</strong> {{ project.project_description|linebreaksbr }}</p>
+
+    <!-- Display Assigned Users -->
+    <p><strong>Assigned Users:</strong></p>
+    <ul>
+      {% for user in project.assigned_users.all %}
+        <li>{{ user.username }}</li>
+      {% empty %}
+        <li>No users assigned to this project yet.</li>
+      {% endfor %}
+    </ul>
+
+    <!-- Action buttons -->
+    <button type="button" onclick="location.href='{% url 'tasks:assign_users' project.id %}'" class="button-main">
+      Assign Users
+    </button>
+    <button type="button" onclick="location.href='{% url 'tasks:update_project' project.id %}'" class="button-main">Edit Project</button>
+    <button type="button" onclick="location.href='{% url 'tasks:delete_project' project.id %}'" class="button-delete">Delete Project</button>
+  </div>
+
+{% endblock %}

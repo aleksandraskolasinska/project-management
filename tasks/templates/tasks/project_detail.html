@@ -1,20 +1,35 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-  <div class="project-details">
-  <h2>{{ project.project_title }}</h2>
-  <p><strong>Created:</strong> {{ project.start_date|date:"F d, Y H:i" }}</p>
-  <p><strong>Modified:</strong> {{ project.modified|date:"F d, Y H:i" }}</p>
-  <p><strong>Status:</strong> {{ project.get_projectStatus_display }}</p>
-  <p><strong>Priority:</strong> {{ project.get_projectPriority_display }}</p>
-  <p><strong>Created by:</strong> {{ project.created_by.username }}</p>
-  <p><strong>Description:</strong> {{ project.project_description|linebreaksbr }}</p>
+<h2>{{ project.project_title }}</h2>
+<p><strong>Description:</strong> {{ project.project_description }}</p>
+<p><strong>Status:</strong> {{ project.get_projectStatus_display }}</p>
+<p><strong>Priority:</strong> {{ project.get_projectPriority_display }}</p>
+<p><strong>Created by:</strong> {{ project.created_by.username }}</p>
+<p><strong>Assigned Users:</strong> 
+    {% for user in project.assigned_users.all %}
+        {{ user.username }}{% if not forloop.last %}, {% endif %}
+    {% empty %}
+        No users assigned.
+    {% endfor %}
+</p>
 
-  <button type="button" onclick="location.href='{% url 'tasks:project_list'  %}'" class="button-main">View Projects</button>
-  <button type="button" onclick="location.href='{% url 'tasks:update_project' project.id %}'" class="button-main">Edit Project</button>
-  <button type="button" onclick="location.href='{% url 'tasks:delete_project' project.id %}'" class="button-delete">Delete Project</button>
-  </div>
-    
+<h3>Comments</h3>
+<ul>
+    {% for comment in comments %}
+    <li>{{ comment.user.username }}: {{ comment.content }} ({{ comment.created_at }})</li>
+    {% empty %}
+    <li>No comments yet.</li>
+    {% endfor %}
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit" name="comment_submit">Add Comment</button>
+</form>
+
+<button type="button" onclick="location.href='{% url 'tasks:assign_users' project.id %}'" class="button-main">Assign Users</button>
+
 
 {% endblock %}
