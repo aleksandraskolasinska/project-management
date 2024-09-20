@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.views import generic
 from django.urls import reverse, reverse_lazy
+# from django.db.models import Q
 
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.decorators import login_required
@@ -15,8 +16,21 @@ def home(request):
 
 @login_required
 def project_list(request):
-    projects = Project.objects.all()
-    return render(request, 'tasks/project_list.html', {'projects': projects})
+    if request.user.is_superuser:
+        projects = Project.objects.all()
+    else:
+        projects = Project.objects.filter(created_by=request.user) | Project.objects.filter(assigned_users=request.user)
+
+    if not projects:
+        no_projects_message = "You haven't created or been assigned to any projects yet."
+        return render(request, 'tasks/project_list.html', {'no_projects_message':no_projects_message})
+
+    return render(request, 'tasks/project_list.html', {
+        'projects': projects,
+    })
+
+    
+    # return render(request, 'tasks/project_list.html', {'projects': projects})
 
 @login_required
 def project_detail(request, project_id):
