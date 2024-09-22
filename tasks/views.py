@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.auth.decorators import login_required
 
+
 from .models import Project, ProjectStatus
 from .forms import ProjectForm, CommentForm, AssignUsersForm
 
@@ -32,10 +33,15 @@ def project_list(request):
     
     # return render(request, 'tasks/project_list.html', {'projects': projects})
 
+
+from django.forms.models import model_to_dict
+
 @login_required
 def project_detail(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     comments = project.comments.all()
+    history = project.history.all()
+
 
     if not (request.user.is_superuser or request.user.groups.filter(name="Admin").exists() or request.user in project.assigned_users.all()):
         return HttpResponseForbidden("You are not authorized to view this page.")
@@ -51,10 +57,46 @@ def project_detail(request, project_id):
     else:
         comment_form = CommentForm()
 
+    changes = []
+    for entry in history:
+
+        diff = {}
+        prev_record = entry.prev_record
+        if prev_record:
+            if prev_record.project_title != entry.project_title:
+                diff['title'] = {
+                    'old': prev_record.project_title,
+                    'new': entry.project_title
+                }
+            if prev_record.project_description != entry.project_description:
+                diff['description'] = {
+                    'old': prev_record.project_description,
+                    'new': entry.project_description
+                }
+            if prev_record.projectStatus != entry.projectStatus:
+                diff['status'] = {
+                    'old': prev_record.projectStatus,
+                    'new': entry.projectStatus
+                }
+            if prev_record.projectPriority != entry.projectPriority:
+                diff['priority'] = {
+                    'old': prev_record.projectPriority,
+                    'new': entry.projectPriority
+                }
+            if diff:
+                changes.append({
+                    'date': entry.history_date,
+                    'user': entry.history_user,  
+                    'type': entry.history_type,
+                    'diff': diff
+                })
+
+
     return render(request, 'tasks/project_detail.html', {
         'project': project,
         'comments': comments,
         'comment_form': comment_form,
+        'changes': changes,
     })
 
 @login_required

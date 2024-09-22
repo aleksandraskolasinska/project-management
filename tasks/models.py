@@ -3,6 +3,7 @@ import datetime
 
 from django.utils import timezone
 from django.contrib.auth.models import User, Permission
+from simple_history.models import HistoricalRecords
 
 class ProjectStatus(models.TextChoices):
     locked = 'Locked'
@@ -32,6 +33,7 @@ class Project(models.Model):
     projectPriority = models.CharField(max_length=20, choices=ProjectPriority.choices, default=ProjectPriority.normal)
     assigned_users = models.ManyToManyField(User, related_name='assigned_projects', blank=True)
 
+    history = HistoricalRecords()
 
 
 class Comment(models.Model):
