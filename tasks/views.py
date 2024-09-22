@@ -59,7 +59,7 @@ def project_detail(request, project_id):
 
     changes = []
     for entry in history:
-        # Access the previous and current values for project_title and project_description
+
         diff = {}
         prev_record = entry.prev_record
         if prev_record:
@@ -72,6 +72,16 @@ def project_detail(request, project_id):
                 diff['description'] = {
                     'old': prev_record.project_description,
                     'new': entry.project_description
+                }
+            if prev_record.projectStatus != entry.projectStatus:
+                diff['status'] = {
+                    'old': prev_record.projectStatus,
+                    'new': entry.projectStatus
+                }
+            if prev_record.projectPriority != entry.projectPriority:
+                diff['priority'] = {
+                    'old': prev_record.projectPriority,
+                    'new': entry.projectPriority
                 }
             if diff:
                 changes.append({

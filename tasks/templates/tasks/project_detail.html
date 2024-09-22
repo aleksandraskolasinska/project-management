@@ -73,6 +73,12 @@
                 {% if change.diff.description %}
                     <p><strong>Description changed:</strong> from "{{ change.diff.description.old }}" to "{{ change.diff.description.new }}"</p>
                 {% endif %}
+                {% if change.diff.status %}
+                    <p><strong>Status changed:</strong> from "{{ change.diff.status.old }}" to "{{ change.diff.status.new }}"</p>
+                {% endif %}
+                {% if change.diff.priority %}
+                    <p><strong>Priority changed:</strong> from "{{ change.diff.priority.old }}" to "{{ change.diff.priority.new }}"</p>
+                {% endif %}
             </div>
         </div>
     </li>
