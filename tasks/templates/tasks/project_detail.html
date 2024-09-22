@@ -52,6 +52,51 @@
     </button>
     <button type="button" onclick="location.href='{% url 'tasks:update_project' project.id %}'" class="button-main">Edit Project</button>
     <button type="button" onclick="location.href='{% url 'tasks:delete_project' project.id %}'" class="button-delete">Delete Project</button>
+
+
+  <p><strong>History:</strong></p>
+  <ul>
+    {% for change in changes %}
+    <li>
+        <div class="change-entry">
+            <strong>{{ change.date|date:"F d, Y H:i" }}:</strong>
+            Edited by {{ change.user }} ({{ change.type }})
+            <!-- Button to toggle displaying changes -->
+            <button type="button" class="toggle-button" onclick="toggleChanges('{{ forloop.counter }}')">
+                Display Changes
+            </button>
+            <!-- Changes displayed after clicking the button -->
+            <div id="changes-{{ forloop.counter }}" class="changes-content" style="display:none;">
+                {% if change.diff.title %}
+                    <p><strong>Title changed:</strong> from "{{ change.diff.title.old }}" to "{{ change.diff.title.new }}"</p>
+                {% endif %}
+                {% if change.diff.description %}
+                    <p><strong>Description changed:</strong> from "{{ change.diff.description.old }}" to "{{ change.diff.description.new }}"</p>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    {% empty %}
+        <li>No edits made yet.</li>
+    {% endfor %}
+  </ul>
+
+
   </div>
+
+
+  <script>
+    function toggleChanges(entryId) {
+        const changesDiv = document.getElementById('changes-' + entryId);
+        
+        if (changesDiv) {
+            if (changesDiv.style.display === 'none') {
+                changesDiv.style.display = 'block';
+            } else {
+                changesDiv.style.display = 'none';
+            }
+        }
+    }
+    </script>
 
 {% endblock %}
