@@ -7,4 +7,4 @@ pytest
 pytest-django
 pytest-benchmark
 requests
-django-simple-history=3.7.0 
+django-simple-history 
